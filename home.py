@@ -6,9 +6,10 @@ import ecobee
 app = Flask(__name__)
 app.debug = True
 
-EC3 = ecobee.Thermostat(app)
+ECSession = ecobee.Session()
+ECSession.start()
 
-ecobee.Session.start()
+EC3 = ecobee.Thermostat(ECSession)
 
 @app.route('/eco', methods=["POST", "GET"])
 def ecobee():
