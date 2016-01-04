@@ -49,6 +49,11 @@ class Thermostat():
                 response = requests.post(self.url + target, payload, headers=headers).json()
         except requests.exceptions.RequestException as e:
             print e
+
+        if "status" in response:
+            if response["status"]["code"] == 14:
+                self.Session.Refresh()
+                return self.DoRequest(target, jsonToSend, type)
         return response
 
 
