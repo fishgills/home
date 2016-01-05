@@ -5,6 +5,7 @@
   "main": "index.js",
   "dependencies": {
     "cli-interact": "^0.1.9",
+    "httpdispatcher": "^0.4.0",
     "node-localstorage": "^1.1.1",
     "nodeunit": "^0.9.1",
     "prompt": "^0.2.14"

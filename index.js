@@ -11,7 +11,7 @@ if (typeof localStorage === "undefined" || localStorage === null) {
 }
 
 //Lets define a port we want to listen to
-const PORT=8080;
+const PORT=5000;
 
 //We need a function which handles requests and send response
 function handleRequest(request, response){
@@ -97,7 +97,7 @@ EchoBee.prototype.intentHandlers = {
                 if(ele.name.toLowerCase() == intent.slots.Room.value) {
                     ele.capability.forEach(function(capability) {
                        if(capability.type == "temperature") {
-                           response.tell("The temperature in the " + intent.slots.Room.value + " is " + capability.value / 10 + " degrees.");
+                            response.tellWithCard("The temperature in the " + intent.slots.Room.value + " is " + capability.value / 10 + " degrees.", "EcoBee Temperature", "The temperature in the " + intent.slots.Room.value + " is " + capability.value / 10 + " degrees.");
                            found = true;
                        }
                     });
