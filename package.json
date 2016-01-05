@@ -1,0 +1,22 @@
+{
+  "name": "house",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "cli-interact": "^0.1.9",
+    "node-localstorage": "^1.1.1",
+    "nodeunit": "^0.9.1",
+    "prompt": "^0.2.14"
+  },
+  "devDependencies": {
+    "nodeunit": "^0.9.1",
+    "nodeunit-httpclient": "^0.2.1",
+    "nodeunit-test-request": "^1.0.0"
+  },
+  "scripts": {
+    "test": "tap test/*.js"
+  },
+  "author": "",
+  "license": "ISC"
+}
