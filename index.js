@@ -5,6 +5,8 @@ var AlexaSkill = require('./AlexaSkill');
 var api = require('./ecobee-api.js');
 var	query = require('cli-interact').getYesNo;
 var config = require('./config');
+var sonos = require("./sonos");
+
 if (typeof localStorage === "undefined" || localStorage === null) {
     var LocalStorage = require('node-localstorage').LocalStorage;
     localStorage = new LocalStorage('./scratch');
@@ -117,3 +119,12 @@ dispatcher.onPost("/eco", function(req, res) {
 
     echoBee.execute(JSON.parse(req.body), res);
 });
+
+var EchoSonos = new sonos();
+
+dispatcher.onPost("/sonos", function(req, res) {
+    res.writeHead(200, {
+        'Content-Type': 'application/json'
+    });
+    EchoSonos.execute(JSON.parse(req.body), res);
+})
