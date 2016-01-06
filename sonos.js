@@ -98,6 +98,11 @@ EchoSonos.prototype.intentHandlers = {
         httpreq(options, function (responseJson) {
             responseJson = JSON.parse(responseJson);
 
+            if(responseJson.hasOwnProperty("error")) {
+                response.ask("There was an error.", "Try again");
+                return;
+            }
+
             var randResponse = Math.floor(Math.random() * STATE_RESPONSES.length);
 
             var responseText = STATE_RESPONSES[randResponse].replace("$currentTitle", responseJson.currentTrack.title).replace("$currentArtist", responseJson.currentTrack.artist);
