@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
+    "body-parser": "^1.14.2",
     "cli-interact": "^0.1.9",
     "express": "^4.13.3",
     "express-xml-bodyparser": "^0.2.2",

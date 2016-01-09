@@ -10,6 +10,7 @@ var config = require('./config');
 var sonos = require("./sonos");
 var meter = require("./meter");
 var xmlparser = require('express-xml-bodyparser');
+var bodyParser = require('body-parser');
 
 if (typeof localStorage === "undefined" || localStorage === null) {
     var LocalStorage = require('node-localstorage').LocalStorage;
@@ -19,7 +20,7 @@ if (typeof localStorage === "undefined" || localStorage === null) {
 var server = http.createServer(app).listen(5000);
 
 app.use('/assets', express.static('assets'));
-
+app.use(bodyParser());
 try {
     var refresh_token = JSON.parse(localStorage.getItem("tokens")).refresh_token;
 } catch (e) {
@@ -92,8 +93,7 @@ var echoBee = new EchoBee();
 
 app.post("/eco", function(req, res) {
     res.writeHead(200, {'Content-Type': 'application/json'});
-
-    echoBee.execute(JSON.parse(req.body), res);
+    echoBee.execute(req.body, res);
 });
 
 var EchoSonos = new sonos();
@@ -102,7 +102,7 @@ app.post("/sonos", function(req, res) {
     res.writeHead(200, {
         'Content-Type': 'application/json'
     });
-    EchoSonos.execute(JSON.parse(req.body), res);
+    EchoSonos.execute(req.body, res);
 });
 
 var Meter = new meter();
