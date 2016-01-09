@@ -6,6 +6,7 @@ var api = require('./ecobee-api.js');
 var	query = require('cli-interact').getYesNo;
 var config = require('./config');
 var sonos = require("./sonos");
+var meter = require("./meter");
 
 if (typeof localStorage === "undefined" || localStorage === null) {
     var LocalStorage = require('node-localstorage').LocalStorage;
@@ -19,7 +20,7 @@ const PORT=5000;
 function handleRequest(request, response){
     try {
         //log the request on console
-        console.log(request.url);
+        // console.log(request.url);
         //Disptach
         dispatcher.dispatch(request, response);
     } catch(err) {
@@ -127,4 +128,15 @@ dispatcher.onPost("/sonos", function(req, res) {
         'Content-Type': 'application/json'
     });
     EchoSonos.execute(JSON.parse(req.body), res);
+});
+
+var Meter = new meter();
+dispatcher.onPost("/meter", function(req, res) {
+  Meter.event(req.body);
+  res.end();
+});
+
+dispatcher.onGet("/meter", function(req, res) {
+  Meter.event(req.body);
+  res.end();
 })

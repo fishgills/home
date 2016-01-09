@@ -50,3 +50,4 @@ crashlytics-build.properties
 
 *.pyc
 token.txt
+node_modules/
