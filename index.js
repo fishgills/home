@@ -1,5 +1,7 @@
 //Lets require/import the HTTP module
 var http = require('http');
+var express = require('express');
+var app = express();
 var dispatcher = require('httpdispatcher');
 var AlexaSkill = require('./AlexaSkill');
 var api = require('./ecobee-api.js');
@@ -7,38 +9,16 @@ var	query = require('cli-interact').getYesNo;
 var config = require('./config');
 var sonos = require("./sonos");
 var meter = require("./meter");
+var xmlparser = require('express-xml-bodyparser');
 
 if (typeof localStorage === "undefined" || localStorage === null) {
     var LocalStorage = require('node-localstorage').LocalStorage;
     localStorage = new LocalStorage('./scratch');
 }
 
-//Lets define a port we want to listen to
-const PORT=5000;
+var server = http.createServer(app).listen(5000);
 
-//We need a function which handles requests and send response
-function handleRequest(request, response){
-    try {
-        //log the request on console
-        // console.log(request.url);
-        //Disptach
-        dispatcher.dispatch(request, response);
-    } catch(err) {
-        console.log(err);
-    }
-}
-//Create a server
-var server = http.createServer(handleRequest);
-
-//Lets start our server
-server.listen(PORT, function(){
-    //Callback triggered when server is successfully listening. Hurray!
-    console.log("Server listening on: http://localhost:%s", PORT);
-});
-
-
-//For all your static (js/css/images/etc.) set the directory name (relative path).
-dispatcher.setStatic('resources');
+app.use('/assets', express.static('assets'));
 
 try {
     var refresh_token = JSON.parse(localStorage.getItem("tokens")).refresh_token;
@@ -75,11 +55,6 @@ api.calls.refresh(refresh_token, function(err, result) {
        console.log("Token refresh not needed.");
    }
 });
-////A sample GET request
-//dispatcher.onGet("/eco", function(req, res) {
-//    res.writeHead(200, {'Content-Type': 'text/plain'});
-//    res.end('Page One');
-//});
 
 var EchoBee = function () {
     AlexaSkill.call(this);
@@ -115,7 +90,7 @@ EchoBee.prototype.intentHandlers = {
 
 var echoBee = new EchoBee();
 
-dispatcher.onPost("/eco", function(req, res) {
+app.post("/eco", function(req, res) {
     res.writeHead(200, {'Content-Type': 'application/json'});
 
     echoBee.execute(JSON.parse(req.body), res);
@@ -123,7 +98,7 @@ dispatcher.onPost("/eco", function(req, res) {
 
 var EchoSonos = new sonos();
 
-dispatcher.onPost("/sonos", function(req, res) {
+app.post("/sonos", function(req, res) {
     res.writeHead(200, {
         'Content-Type': 'application/json'
     });
@@ -131,12 +106,12 @@ dispatcher.onPost("/sonos", function(req, res) {
 });
 
 var Meter = new meter();
-dispatcher.onPost("/meter", function(req, res) {
+app.post("/meter", xmlparser(), function(req, res) {
   Meter.event(req.body);
   res.end();
 });
 
-dispatcher.onGet("/meter", function(req, res) {
-  Meter.event(req.body);
-  res.end();
-})
+
+app.get("/", function(req, res) {
+  console.log('get!');
+});
