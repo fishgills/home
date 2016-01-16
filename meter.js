@@ -11,9 +11,26 @@ try {
 	console.log("RRD Database exists.");
 } catch (e) {
 	console.log("Creating rrd database.");
-	rrd.create(rrdfile, 2, now(), ['DS:kwh:GAUGE:30:0:20', 'RRA:LAST:0.5:1:60'], function(error) {
+	rrd.create(rrdfile, {
+		step: 2,
+		time: now(),
+		ds: new rrd.DS({
+			name: "kwh",
+			type: "GAUGE",
+			heartbeat: 30,
+			min: 0,
+			max: 20
+		}),
+		rra: [
+			new rrd.RRA({
+				cf:"AVERAGE",
+				xff: 0.5,
+				steps:1,
+				rows: 31556926
+			})]
+	}, function(error) {
 		if (error !== null) { throw 'Error creating RRD:' + error; }
-	});	
+	});
 }
 
 var MeterHandler = function() {};
