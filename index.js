@@ -12,6 +12,7 @@ var meter = require("./meter");
 var xmlparser = require('express-xml-bodyparser');
 var bodyParser = require('body-parser');
 var rrd = require('./node_rrd/lib/rrd');
+var path = require('path');
 var child_process = require("child_process");
 
 if (typeof localStorage === "undefined" || localStorage === null) {
@@ -120,21 +121,24 @@ app.get("/meter", function (req, res) {
     if (req.query.end)
         end = req.query.end;
 
-    var string = child_process.execSync("rrdtool fetch meter.rrd LAST --start " + start + " --end " + end);
-    var points = [];
-    string.toString().split("\n").forEach(function (ele) {
-        var data = ele.split(" ");
-        if (!data[0])
-            return;
-        points.push({
-            ts: data[0],
-            kwh: data[1]
-        })
-    });
-    res.json(points);
+    try {
+        var string = child_process.execSync("rrdtool fetch meter.rrd AVERAGE --start " + start + " --end " + end);
+        var points = [];
+        string.toString().split("\n").forEach(function (ele) {
+            var data = ele.split(" ");
+            if (!data[0])
+                return;
+            points.push({
+                ts: data[0],
+                kwh: data[1]
+            })
+        });
+        res.json(points);
+    } catch(e) {
+        console.log("rrd error: ", e);
+    }
 });
 
 app.get("/", function (req, res) {
-    console.log('get!');
-    res.end();
+    res.sendFile(path.join(__dirname  + "/index.html"));
 });

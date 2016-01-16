@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<meta charset="utf-8">
+<head>
+</head>
+<body>
+<script src="//code.jquery.com/jquery-1.12.0.min.js"></script>
+
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+<script>
+    $(function () {
+        $(document).ready(function () {
+            Highcharts.setOptions({
+                global: {
+                    useUTC: false
+                }
+            });
+
+            var options = {
+                chart: {
+                    type: 'spline',
+                    marginRight: 10
+                },
+                xAxis: {
+                    type: 'datetime',
+                    tickPixelInterval: 150
+                },
+                yAxis: {
+                    title: {
+                        text: 'Value'
+                    },
+                    plotLines: [{
+                        value: 0,
+                        width: 1,
+                        color: '#808080'
+                    }]
+                },
+                legend: {
+                    enabled: false
+                },
+                exporting: {
+                    enabled: false
+                },
+                series: [{}]
+            };
+            var end = Math.floor(Date.now() / 1000);
+            var start = end - (60 * 60);
+            $.getJSON("/meter?start="+start+"&end="+end, function (data) {
+                var newdata = [];
+                var newdata = data.map(function(a) {
+                   return [parseInt(a.ts) * 1000, parseFloat(a.kwh)];
+                }).filter(function(a) {
+                    return Boolean(a[1]);
+                });
+                options.series[0].data = newdata;
+                $("#container").highcharts(options);
+            });
+        });
+    });
+
+</script>
+<div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+</body>
+</html>
