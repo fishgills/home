@@ -326,9 +326,10 @@ var update = function () {
 */
 var fetch = function () {
   var args = null;
-  
-  if (args = conformed([String, Strict(Object), Function], arguments)) {
-    
+
+  if (args = conformed([String, String, Function], arguments, {
+        verbose: true
+      })) {
     var options = {
       cf: "LAST",           
       start: nows(-3600),   /* seconds since epoch */
@@ -347,7 +348,6 @@ var fetch = function () {
     return bindings.fetch.call(null, args[0], options['cf'], options['start'], options['end'], options['resolution'], args[2]);
     
   }
-  
   throw new Error("rrd: arguments' format not implemented!");
 };
 
