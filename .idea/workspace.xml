@@ -1,19 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="2bdfd669-6f06-4754-acf9-3625b90aa33c" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/deployment.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/webServers.xml" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/web/AlexaSkill.js" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/batch/config.ini" afterPath="$PROJECT_DIR$/batch/config.ini" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/batch/ecobee.py" afterPath="$PROJECT_DIR$/batch/ecobee.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/batch/home.db" afterPath="$PROJECT_DIR$/batch/home.db" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/batch/mongo.py" afterPath="$PROJECT_DIR$/batch/mongo.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web/index.js" afterPath="$PROJECT_DIR$/web/index.js" />
-    </list>
+    <list default="true" id="2bdfd669-6f06-4754-acf9-3625b90aa33c" name="Default" comment="" />
     <ignored path="home.iws" />
     <ignored path=".idea/workspace.xml" />
     <ignored path=".idea/dataSources.local.xml" />
@@ -40,8 +28,8 @@
       <file leaf-file-name="index.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/web/index.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.31087288">
-              <caret line="16" column="24" selection-start-line="16" selection-start-column="24" selection-end-line="16" selection-end-column="24" />
+            <state vertical-scroll-proportion="0.56355286">
+              <caret line="27" column="28" selection-start-line="27" selection-start-column="28" selection-end-line="27" selection-end-column="28" />
               <folding />
             </state>
           </provider>
@@ -922,12 +910,12 @@
       <workItem from="1453256308935" duration="3564000" />
       <workItem from="1453309836395" duration="7000" />
       <workItem from="1453309847660" duration="1000" />
-      <workItem from="1453343659307" duration="103000" />
+      <workItem from="1453343659307" duration="152000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="5104000" />
+    <option name="totallyTimeSpent" value="5153000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="49" y="23" width="1391" height="797" extended-state="0" />
@@ -1245,8 +1233,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/web/index.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.31087288">
-          <caret line="16" column="24" selection-start-line="16" selection-start-column="24" selection-end-line="16" selection-end-column="24" />
+        <state vertical-scroll-proportion="0.56355286">
+          <caret line="27" column="28" selection-start-line="27" selection-start-column="28" selection-end-line="27" selection-end-column="28" />
           <folding />
         </state>
       </provider>
