@@ -1,12 +1,12 @@
 from pymongo import MongoClient
-client = MongoClient('192.168.99.100', 32768)
+client = MongoClient('localhost')
 
 db = client.house
 
 def SaveWeather(data):
     weathers = db.weathers
-    weathers.insert_one(data)
+    weathers.insert_one(data["main"])
 
 def SaveEco(data):
     eco = db.ecos
-    eco.insert_one(data)
+    eco.insert_one(data["thermostatList"][0])

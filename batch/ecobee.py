@@ -2,6 +2,7 @@ import requests
 import ConfigParser
 import shelve
 import json
+import logging
 
 s = shelve.open("home", writeback=True)
 Config = ConfigParser.ConfigParser()
