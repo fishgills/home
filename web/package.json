@@ -4,22 +4,12 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
-    "bindings": "^1.2.1",
     "body-parser": "^1.14.2",
-    "cli-interact": "^0.1.9",
-    "express": "^4.13.3",
+    "express": "^4.13.4",
     "express-xml-bodyparser": "^0.2.2",
-    "httpdispatcher": "^0.4.0",
-    "node-localstorage": "^1.1.1",
-    "nodeunit": "^0.9.1",
-    "prompt": "^0.2.14",
-    "xml2js": "^0.4.15"
+    "mongoose": "^4.3.6"
   },
-  "devDependencies": {
-    "nodeunit": "^0.9.1",
-    "nodeunit-httpclient": "^0.2.1",
-    "nodeunit-test-request": "^1.0.0"
-  },
+  "devDependencies": {},
   "scripts": {
     "test": "tap test/*.js"
   },

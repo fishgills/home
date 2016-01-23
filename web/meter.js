@@ -1,37 +1,16 @@
-var parseString = require("xml2js").parseString;
-var rrd = require('./node_rrd/lib/rrd');
-var fs = require("fs");
+//var fs = require("fs");
+var mongoose = require("mongoose");
+var Schema = mongoose.Schema;
 
-var rrdfile = "meter.rrd";
+mongoose.connect("mongodb://localhost/house");
 
-function now() { return Math.ceil((new Date).getTime() / 1000); }
+var ReadingSchema = new Schema({
+	date: { type: Date, default: Date.now },
+	kwh: Number
+});
+var Reading = mongoose.model("Reading", ReadingSchema);
 
-try {
-	fs.accessSync(rrdfile, fs.F_OK);
-	console.log("RRD Database exists.");
-} catch (e) {
-	console.log("Creating rrd database.");
-	rrd.create(rrdfile, {
-		step: 2,
-		time: now(),
-		ds: new rrd.DS({
-			name: "kwh",
-			type: "GAUGE",
-			heartbeat: 30,
-			min: 0,
-			max: 20
-		}),
-		rra: [
-			new rrd.RRA({
-				cf:"AVERAGE",
-				xff: 0.5,
-				steps:1,
-				rows: 31556926
-			})]
-	}, function(error) {
-		if (error !== null) { throw 'Error creating RRD:' + error; }
-	});
-}
+
 
 var MeterHandler = function() {};
 
@@ -64,10 +43,10 @@ Meter.prototype.handlers.instantaneousdemand.message = function(data) {
 		power: total
 	}
 	console.log("Updating meter: ", point.power+" kwh");
-	rrd.update(rrdfile, "kwh", [[now(), total].join(":")], function(error) {
-		if(error !== null)
-			console.log(error);
+	var reading = new Reading({
+		kwh: point.power
 	});
+	reading.save();
 }
 
 

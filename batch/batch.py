@@ -2,7 +2,7 @@ import temperature
 from pymongo import MongoClient
 import ecobee
 
-client = MongoClient('localhost')
+client = MongoClient('192.168.1.2')
 
 db = client.house
 temps = db.temps
@@ -22,5 +22,6 @@ for sensor in ecobee['thermostatList'][0]['remoteSensors']:
     data[name] = temp
 
 data["outside"] = kelvinToF(weather["main"]["temp"])
+print data
 
 temps.insert_one(data)

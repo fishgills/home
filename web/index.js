@@ -5,8 +5,7 @@ var app = express();
 var meter = require("./meter");
 var xmlparser = require('express-xml-bodyparser');
 var bodyParser = require('body-parser');
-var rrd = require('./node_rrd/lib/rrd');
-var child_process = require("child_process");
+//var child_process = require("child_process");
 
 var server = http.createServer(app).listen(5000);
 
