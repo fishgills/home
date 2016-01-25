@@ -6,11 +6,13 @@ var xmlparser = require('express-xml-bodyparser');
 var bodyParser = require('body-parser');
 var jade = require('jade');
 var data = require('./data');
+var path = require('path');
 
 var server = http.createServer(app).listen(5000);
 
 
-app.use('/assets', express.static('assets'));
+app.use('/assets', express.static(path.join(__dirname, '/assets')));
+app.use('/bower_components', express.static(path.join(__dirname, '/bower_components')));
 app.set('view engine', 'jade');
 app.use(bodyParser());
 
@@ -27,5 +29,9 @@ app.get("/meter", function (req, res) {
 });
 
 app.get('/data', function(req, res) {
-   data.get("-2 hours", res);
+    if(!req.query.start) {
+        console.error("Start timestamp required.");
+    } else {
+        data.get(req.query.start, res);
+    }
 });

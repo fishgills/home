@@ -3,10 +3,10 @@ var strtotime = require('./strtotime');
 var db = require('./db');
 var perf = require("performance-now");
 
-exports.get = function(date, resp) {
+exports.get = function(startstamp, resp) {
     var t0 = perf();
-    var cutoffSeconds = strtotime.strtotime(date) * 1000;
-    var cutoff = new Date(cutoffSeconds);
+    var cutoff = new Date(Number(startstamp));
+    console.log("Data request starting at", cutoff);
     db.Reading.find({
         date: {
             $gt: cutoff

@@ -1,5 +1,83 @@
-google.charts.load('current', {'packages':['line']});
-google.charts.setOnLoadCallback(drawChart);
+localStorage.setItem("table", JSON.stringify([]));
+
+
+var Chart = {
+    data: null,
+    lastUpdate: moment("01/01/1900"),
+    options: {
+        chart: {
+            title: 'Dashboard!'
+        },
+        width: "100%",
+        height: 500,
+        series: {
+            // Gives each series an axis name that matches the Y-axis below.
+            0: {axis: 'Energy'},
+            1: {axis: 'Temps'},
+            2: {axis: 'Temps'},
+            3: {axis: 'Temps'}
+        },
+        axes: {
+            // Adds labels to each axis; they don't have to match the axis names.
+            y: {
+                Energy: {label: 'Energy (kWh)'},
+                Temps: {label: 'Temps (F°)'}
+            }
+        }
+    },
+    start: function() {
+        var self = this;
+        google.charts.load('current', {'packages':['line']});
+        google.charts.setOnLoadCallback(function() {
+            self.init.apply(self);
+        });
+    },
+    updateData: function() {
+        var self = this;
+        var table = DataService.getTable();
+        if(table.length == 0) {
+            setTimeout(function() {
+                self.updateData.apply(self);
+            }, 100);
+            return;
+        }
+        var cur = false;
+        var update = false;
+        for(var i =0; i < table.length; i++) {
+            var row = table[i];
+            var cur = moment(row[0]);
+            if(cur.isAfter(this.lastUpdate)) {
+                var update = true;
+                this.data.addRow([new Date(row[0]), row[1], row[2], row[3], row[4]]);
+            }
+        }
+        var time_filter = this.data.getFilteredRows([{
+            column: 0,
+            maxValue: new Date(table[0][0])
+        }]);
+        if(time_filter.length > 0) {
+            this.data.removeRows(0, time_filter.length);
+        }
+
+        if(update) {
+            this.table.draw(this.data, this.options);
+            this.lastUpdate = cur;
+        }
+        setTimeout(function() {
+            self.updateData.apply(self);
+        }, 100);
+    },
+    init: function() {
+        this.data = new google.visualization.DataTable();
+        this.data.addColumn("datetime", "Time");
+        this.data.addColumn("number", "Energy");
+        this.data.addColumn("number", "Baby Room");
+        this.data.addColumn("number", "Living Room");
+        this.data.addColumn("number", "Master Bedroom");
+        this.table = new google.charts.Line(document.getElementById('chart_div'));
+        this.updateData();
+    }
+};
 
 function closestDate(array, date) {
     var bestDiff = -(new Date(0,0,0)).valueOf();
@@ -15,52 +93,58 @@ function closestDate(array, date) {
     return array[bestDate];
 
 }
-function drawChart() {
-    $.get("/data").done(function(jsonData) {
-
-        // Create the data table.
-        var data = new google.visualization.DataTable();
-        data.addColumn("datetime", "Time");
-        data.addColumn("number", "Energy");
-        data.addColumn("number", "Baby Room");
-        data.addColumn("number", "Living Room");
-        data.addColumn("number", "Master Bedroom");
-
-        var start = new Date(jsonData.cutoff);
-        var interval = 5;
-        var numPoints = ((new Date() - start) / 1000) / interval;
-
-        for(var i = 0; i < numPoints; i++) {
-            var energy = closestDate(jsonData.readings, start);
-            var temp = closestDate(jsonData.temps, start);
-            data.addRow([new Date(start.getTime()), energy.kwh, temp.baby_room, temp.living_room, temp.master_bedroom]);
-            start.setSeconds(start.getSeconds() + interval);
-        }
-        var materialOptions = {
-            chart: {
-                title: 'Dashboard!'
-            },
-            width: "100%",
-            height: 500,
-            series: {
-                // Gives each series an axis name that matches the Y-axis below.
-                0: {axis: 'Energy'},
-                1: {axis: 'Temps'},
-                2: {axis: 'Temps'},
-                3: {axis: 'Temps'}
-            },
-            axes: {
-                // Adds labels to each axis; they don't have to match the axis names.
-                y: {
-                    Energy: {label: 'Energy (kWh)'},
-                    Temps: {label: 'Temps (F°)'}
-                }
+var DataService = {
+    hours: 1,
+    getTable: function() {
+        return JSON.parse(localStorage.getItem("table"));
+    },
+    setTable: function(data) {
+        var i = data.length;
+        var now = moment().subtract(this.hours, "hours");
+        while(i--) {
+            if(moment(data[i][0]).isBefore(now)) {
+                data.splice(i, 1);
             }
-        };
+        }
+        localStorage.setItem("table", JSON.stringify(data));
+    },
+    poll: function() {
+        var self = this;
+        var table = this.getTable();
 
-        // Instantiate and draw our chart, passing in some options.
-        var chart = new google.charts.Line(document.getElementById('chart_div'));
-        chart.draw(data, materialOptions);
+        var start = (table[table.length - 1] == undefined) ? moment().subtract(this.hours, "hours").valueOf() : moment(table[table.length - 1][0]).valueOf();
 
-    });
-}
+        $.get("/data", {
+            start: start
+        }).done(function(data) {
+            var start = new Date(data.cutoff);
+            var interval = 5;
+            var numPoints = Math.floor((Math.floor((new Date() - start) / 1000)) / interval);
+
+            for(var i = 0; i < numPoints; i++) {
+                var energy = closestDate(data.readings, start);
+                var temp = closestDate(data.temps, start);
+                if(!temp) {
+                    temp = {};
+                    temp.baby_room = table[table.length - 1][2];
+                    temp.living_room = table[table.length - 1][3];
+                    temp.master_bedroom = table[table.length - 1][4];
+                }
+
+                table.push([new Date(start.getTime()), energy.kwh, temp.baby_room, temp.living_room, temp.master_bedroom]);
+                start.setSeconds(start.getSeconds() + interval);
+            }
+            self.setTable(table);
+            setTimeout(function() {
+                self.poll.apply(self);
+            }, 5000);
+        });
+    },
+    start: function() {
+        this.poll();
+    }
+};
+$(document).ready(function() {
+    DataService.start();
+    Chart.start();
+});
