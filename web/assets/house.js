@@ -15,9 +15,10 @@ var Chart = {
             0: {axis: 'Energy'},
             1: {axis: 'Temps'},
             2: {axis: 'Temps'},
+            3: {axis: 'Temps'},
             4: {axis: 'Temps'},
             5: {axis: 'Temps'},
-            6: {axis: 'Temps'},
+            6: {axis: 'Temps'}
         },
         axes: {
             // Adds labels to each axis; they don't have to match the axis names.
