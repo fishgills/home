@@ -135,7 +135,6 @@ var DataService = {
                     energy = {}
                     energy.kwh = table[table.length - 1][1];
                 }
-
                 table.push([new Date(start.getTime()), energy.kwh, temp.baby_room, temp.living_room, temp.master_bedroom]);
                 start.setSeconds(start.getSeconds() + interval);
             }
