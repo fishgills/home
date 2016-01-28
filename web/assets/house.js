@@ -74,6 +74,8 @@ var Chart = {
         this.data.addColumn("number", "Baby Room");
         this.data.addColumn("number", "Living Room");
         this.data.addColumn("number", "Master Bedroom");
+        this.data.addColumn("number", "Hallway");
+        this.data.addColumn("number", "Outside");
         this.table = new google.charts.Line(document.getElementById('chart_div'));
         this.updateData();
     }
@@ -129,6 +131,11 @@ var DataService = {
                     temp.baby_room = table[table.length - 1][2];
                     temp.living_room = table[table.length - 1][3];
                     temp.master_bedroom = table[table.length - 1][4];
+                }
+
+                if(!energy) {
+                    energy = {}
+                    energy.kwh = table[table.length - 1][1];
                 }
 
                 table.push([new Date(start.getTime()), energy.kwh, temp.baby_room, temp.living_room, temp.master_bedroom]);

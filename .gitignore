@@ -53,3 +53,4 @@ token.txt
 node_modules/
 .AppleDouble
 *.rrd
+bower_components
