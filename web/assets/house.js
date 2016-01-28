@@ -50,7 +50,7 @@ var Chart = {
             var cur = moment(row[0]);
             if(cur.isAfter(this.lastUpdate)) {
                 var update = true;
-                this.data.addRow([new Date(row[0]), row[1], row[2], row[3], row[4]]);
+                this.data.addRow([new Date(row[0]), row[1], row[2], row[3], row[4], row[5], row[6]]);
             }
         }
         var time_filter = this.data.getFilteredRows([{
