@@ -135,7 +135,7 @@ var DataService = {
                     temp.baby_room = tableEntry[2];
                     temp.living_room = tableEntry[3];
                     temp.master_bedroom = tableEntry[4];
-                    temp.hallway = tableEntry[5];
+                    temp.upstairs = tableEntry[5];
                     temp.outside = tableEntry[6];
                 }
 

@@ -5,4 +5,10 @@ def GetWeather():
 
     response = urllib.urlopen(url)
     data = json.loads(response.read())
-    return data
+    return kelvinToF(data["main"]["temp"])
+
+def kelvinToF(kelvin):
+    return (kelvin - 273.15) * 1.8 + 32
+
+if __name__ == "__main__":
+    print GetWeather()
