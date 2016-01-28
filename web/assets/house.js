@@ -15,7 +15,9 @@ var Chart = {
             0: {axis: 'Energy'},
             1: {axis: 'Temps'},
             2: {axis: 'Temps'},
-            3: {axis: 'Temps'}
+            4: {axis: 'Temps'},
+            5: {axis: 'Temps'},
+            6: {axis: 'Temps'},
         },
         axes: {
             // Adds labels to each axis; they don't have to match the axis names.
@@ -126,19 +128,22 @@ var DataService = {
             for(var i = 0; i < numPoints; i++) {
                 var energy = closestDate(data.readings, start);
                 var temp = closestDate(data.temps, start);
+                var tableEntry = table[table.length - 1];
                 if(!temp) {
                     temp = {};
-                    temp.baby_room = table[table.length - 1][2];
-                    temp.living_room = table[table.length - 1][3];
-                    temp.master_bedroom = table[table.length - 1][4];
+                    temp.baby_room = tableEntry[2];
+                    temp.living_room = tableEntry[3];
+                    temp.master_bedroom = tableEntry[4];
+                    temp.hallway = tableEntry[5];
+                    temp.outside = tableEntry[6];
                 }
 
                 if(!energy) {
                     energy = {}
-                    energy.kwh = table[table.length - 1][1];
+                    energy.kwh = tableEntry[1];
                 }
 
-                table.push([new Date(start.getTime()), energy.kwh, temp.baby_room, temp.living_room, temp.master_bedroom]);
+                table.push([new Date(start.getTime()), energy.kwh, temp.baby_room, temp.living_room, temp.master_bedroom, temp.hallway, temp.outside]);
                 start.setSeconds(start.getSeconds() + interval);
             }
             self.setTable(table);
