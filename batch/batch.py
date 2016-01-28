@@ -3,7 +3,7 @@ from pymongo import MongoClient
 import ecobee
 import datetime
 
-client = MongoClient('192.168.1.2')
+client = MongoClient('localhost')
 
 db = client.house
 temps = db.temps
